@@ -622,9 +622,7 @@ int r = 5 / b;
 
 Для реализации лексического анализа используется инструмент JFlex. Он представляет собой генератор лексических анализаторов, аналогичный утилите Lex, но ориентированный на Java. Инструмент позволяет описывать правила токенизации с использованием регулярных выражений, автоматически генерируя эффективный код. Это уменьшает время разработки и количество ошибок, в сравнении с ручной реализацией.
 
-Синтаксический анализ реализован с использованием BYACC/J. Данный инструмент является адаптацией классического генератора парсеров YACC для языка Java. Он позволяет задавать контекстно-свободную грамматику языка и автоматически генерировать LALR(1)-парсер. Использование данного инструмента упрощает процесс разработки и уменьшает количество ошибок.
-
-Для визуализации синтаксических деревьев применяется Graphviz. Этот инструмент используется для построения и отображения графовых структур, таких как абстрактные синтаксические деревья (AST). Визуализация дерева разбора позволяет упростить отладку интерпретатора, а также наглядно продемонстрировать структуру обрабатываемых программ.
+	Синтаксический анализ реализован с использованием BYACC/J. Данный инструмент является адаптацией классического генератора парсеров YACC для языка Java. Он позволяет задавать контекстно-свободную грамматику языка и автоматически генерировать LALR(1)-парсер. Использование данного инструмента упрощает процесс разработки и уменьшает количество ошибок.
 
 Таким образом, выбранные инструменты позволяют эффективно реализовать интерпретатор, обеспечивая удобство разработки, отладки системы и избавляя от части потенциальных ошибок.
 
@@ -638,9 +636,8 @@ int r = 5 / b;
 Основной файл
 Точкой входа в приложение является файл `Main.java`. Данный класс содержит минимальную логику и выполняет делегирование управления методу `main()` класса `j0`. Такой подход позволяет изолировать пользовательский интерфейс запуска программы от внутренней логики интерпретатора и упрощает дальнейшую модификацию архитектуры.
 
-Директория frontend — лексический и синтаксический анализ
-Отвечает за обработку исходного текста программы и преобразование его в синтаксическое дерево.
-- `j0.java` — центральный класс фронтенда. Он координирует процесс анализа: инициализирует лексер, запускает парсер и управляет потоком обработки входных данных.
+Код в директории frontend (см. Приложение А) отвечает за обработку исходного текста программы и преобразование его в синтаксическое дерево.
+- `j0.java` — центральный класс, который координирует процессы: инициализирует лексер, запускает парсер и управляет потоком обработки входных данных.
     
 - `Yylex.java` — лексический анализатор, сгенерированный с помощью JFlex. Выполняет разбиение входного потока символов на последовательность токенов.
     
@@ -659,8 +656,7 @@ int r = 5 / b;
 
 Таким образом, пакет `frontend` реализует полный цикл преобразования исходного текста программы в абстрактное синтаксическое дерево.
 
-Директория runtime — интерпретация и выполнение
-Пакет `runtime` реализует этап семантического анализа и непосредственного выполнения программы.
+В директории runtime (см. Приложение Б) находятся классы, которые отвечают за интерпретацию и выполнение.
 - `Interpreter.java` — ключевой компонент системы. Выполняет обход синтаксического дерева, проводит семантический анализ и интерпретирует конструкции языка.
     
 - `SymbolTable.java` — реализация таблицы символов. Обеспечивает хранение переменных, их значений и поддерживает вложенные области видимости (scope).
@@ -848,7 +844,7 @@ println(arr)
 ### Реализация лексического анализатора
 
 #### Описание лексем
-Правила разбора на лексемы задаются в файле `javalex.l` с использованием регулярных выражений.
+Правила разбора на лексемы задаются в файле `javalex.l` (см. Приложение А) с использованием регулярных выражений.
 
 Основные группы токенов:
 
@@ -898,7 +894,7 @@ println(arr)
 Каждому регулярному выражению соответствует код, который должен выполниться при считывании — вызов метода `scan()` с передачей кода токена или выполнение вспомогательных функций, например, увеличить номер строки.
 
 #### Класс лексера
-Лексер в интерпретаторе Aqua реализован с использованием генератора JFlex, который на основе регулярных выражений, формирует класс `Yylex.java`.
+Лексер в интерпретаторе Aqua реализован с использованием генератора JFlex (см. Приложение В), который на основе регулярных выражений, формирует класс `Yylex.java` (см. Приложение А).
 Основным методом класса является `yylex()`. Данный метод считывает символы из входного потока, сопоставляет их с шаблонами регулярных выражений и для каждой лексемы выполняет код, который был указан в файле `javalex.l`.
 
 #### Создание токенов
@@ -918,7 +914,7 @@ Lexer error: unrecognized character '@' at line 1
 ### Реализация синтаксического анализатора
 
 #### Описание грамматики
-Правила синтаксического разбора задаются в файле `j0gram.y`. В фигурных скобках после правил прописаны семантические действия, которые указывают, какие из токенов попадут в дерево разбора, а какие будут проигнорированы.
+Правила синтаксического разбора задаются в файле `j0gram.y` (см. Приложение А). В фигурных скобках после правил прописаны семантические действия, которые указывают, какие из токенов попадут в дерево разбора, а какие будут проигнорированы.
 
 Основные группы конструкций:
 
@@ -941,7 +937,7 @@ Type: INT | FLOAT | BOOL | STRING | Name | INTARRAY
 - арифметические, логические, сравнения, присваивания, вызовы функций и др.
 
 #### Класс парсера
-С помощью BYACC/J на основе файла грамматики автоматически генерируется класс `Parser.java`. Ключевым методом является `yyparse()`. Внутри себя данный метод вызывает функцию `yylex()` для получения следующего для обработки токена, а затем сопоставляет значение с заданными правилами производства. Для передачи значений между правилами используется класс `ParserVal`, который, по своей сути, является контейнером для объекта `Token`. Токены помещаются в объекты класса `Tree`, которые реализуют узлы дерева разбора.
+С помощью BYACC/J (см. Приложение В) на основе файла грамматики автоматически генерируется класс `Parser.java` (см. Приложение А). Ключевым методом является `yyparse()`. Внутри себя данный метод вызывает функцию `yylex()` для получения следующего для обработки токена, а затем сопоставляет значение с заданными правилами производства. Для передачи значений между правилами используется класс `ParserVal`, который, по своей сути, является контейнером для объекта `Token`. Токены помещаются в объекты класса `Tree`, которые реализуют узлы дерева разбора.
 
 #### Обработка ошибок
 При обнаружении синтаксической ошибки вызывается метод `yyerror` класса `Yyerror`, формирующий сообщение с указанием строки и типа ошибки.
@@ -957,7 +953,7 @@ Parser error: unexpected token '}' at line 10
 
 ### Реализация семантического анализатора
 
-Полученное на предыдущем этапе абстрактное синтаксическое дерево подлежит анализу на предмет ошибок и для вычисления служебной информации. Этот функционал реализует метод `semantic()` класса `Interpreter`. В качестве параметров он принимает дерево разбора и глобальную область видимости, в которой уже заданы некоторые значения, например, встроенные функции. Работа семантического анализатора, начинается с вызова `analyzeBlock` для корня дерева разбора.
+Полученное на предыдущем этапе абстрактное синтаксическое дерево подлежит анализу на предмет ошибок и для вычисления служебной информации. Этот функционал реализует метод `semantic()` класса `Interpreter` (см. Приложение Б). В качестве параметров он принимает дерево разбора и глобальную область видимости, в которой уже заданы некоторые значения, например, встроенные функции. Работа семантического анализатора, начинается с вызова `analyzeBlock` для корня дерева разбора.
 Данный метод рекурсивно обходит дерево, выполняя ряд операций:
   - Объявления переменных: добавляет новые записи в `SymbolTable`, проверяет их на повтор.
   - Присваивания: проверяет существование переменной, типы, допустимость операций.
@@ -966,19 +962,19 @@ Parser error: unexpected token '}' at line 10
   - Вложенные блоки: создает вложенные таблицы символов.
   
 
-В основе реализации `SymbolTable` стоит структура данных словарь, где ключом является имя переменной, которому соответствует её текущее состояние. В Java такая структура объявляется как `HashMap<String, RuntimeValue>`. `RuntimeValue.java` представляет собой универсальный контейнер для значений разных типов (int, float, bool, массивы, функции), который содержит тип переменной и само значение.
+В основе реализации `SymbolTable` (см. Приложение Б) стоит структура данных словарь, где ключом является имя переменной, которому соответствует её текущее состояние. В Java такая структура объявляется как `HashMap<String, RuntimeValue>`. `RuntimeValue.java` представляет собой универсальный контейнер для значений разных типов (int, float, bool, массивы, функции), который содержит тип переменной и само значение.
 Помимо этого таблица символов поддерживает вложенность областей видимости через ссылку на родителя, а также реализует следующие методы:
   - `addVar(String name, RuntimeValue value)`: добавляет переменную, проверяет на повтор.
   - `getVar(String name)`: ищет переменную в текущей и родительских областях.
   - `contains(String name)`: проверяет наличие переменной.
 По завершении обработки, ссылка на `SymbolTable` сохраняется в соответствующем узле самого синтаксического дерева.
 
-Класс `PrimitiveHandler` отвечает за проверку типов операндов, автоматическое приведение к нужному типу и реализацию базовых операций над типами, а именно: арифметические, логические, сравнение.
+Класс `PrimitiveHandler` (см. Приложение Б) отвечает за проверку типов операндов, автоматическое приведение к нужному типу и реализацию базовых операций над типами, а именно: арифметические, логические, сравнение.
 
-Обработка функций осуществляется в классе `FunctionHandler`. При вызове функции он находит её в таблице символов, проверяет аргументы, создает новую область видимости, выполняет тело функции. Также класс имеет методы для обработки встроенных функций, такие как: добавление их в область видимости и вызов их реализации, написанной на Java.
+Обработка функций осуществляется в классе `FunctionHandler` (см. Приложение Б). При вызове функции он находит её в таблице символов, проверяет аргументы, создает новую область видимости, выполняет тело функции. Также класс имеет методы для обработки встроенных функций, такие как: добавление их в область видимости и вызов их реализации, написанной на Java.
 
 #### Обработка ошибок
-Обработка ошибок находится `ErrorHandler`. При возникновении нештатной ситуации вызывается один из методов класса, который, в свою очередь, выбрасывает исключение, обработка которого находится на уровень выше, в классе `j0`.
+Обработка ошибок находится `ErrorHandler` (см. Приложение Б). При возникновении нештатной ситуации вызывается один из методов класса, который, в свою очередь, выбрасывает исключение, обработка которого находится на уровень выше, в классе `j0`.
 
 #### Заключение
 Семантический анализатор гарантирует корректность программы на уровне типов, областей видимости, операций и вызовов функций, предотвращая ошибки времени выполнения.
@@ -1026,7 +1022,7 @@ Parser error: unexpected token '}' at line 10
 Стоит отметить, что на данном этапе не производится проверка инициализации переменных, областей видимости и типов. Благодаря семантическому анализу обеспечивается корректная работа программы без необходимости вычислительных затрат на проверку ошибок.
 
 ### Тесты
-В ходе разработки интерпретатора были реализованы юнит тесты на языке Java, используя библиотеку JUnit5. Код тестов находятся в файле `tests/main/InterpreterTests.java`. Тестируемые скрипты на языке aqua находятся в папке `tests/files/`.
+В ходе разработки интерпретатора были реализованы юнит тесты на языке Java, используя библиотеку JUnit5. Код тестов находятся в файле `tests/main/InterpreterTests.java` (см. Приложение Г). Тестируемые скрипты на языке aqua находятся в папке `tests/files/`.
 
 Для избегания повторения кода в тестах реализованы две служебных функции:
 - **test_success(String filename, Object var_value):**
@@ -1042,12 +1038,7 @@ Parser error: unexpected token '}' at line 10
 
 
 ## Заключение	    
-### Оценка производительности языка
-Для оценки производительности интерпретатора языка Aqua было проведено экспериментальное сравнение времени выполнения программы `examples/ege_task.aqua` с аналогичной реализацией на языке Python.
-Измерения показали, что среднее время выполнения составило: 164 мс для языка Aqua и 38 мс для Python.
-Таким образом, интерпретатор Aqua уступает по скорости выполнения примерно в 4 раза.
 
-Полученный результат является ожидаемым и объясняется рядом факторов: отсутствием оптимизаций, характерных для зрелых интерпретаторов, а также учебной направленностью реализации. При этом достигнутый уровень производительности можно считать удовлетворительным, поскольку он подтверждает корректность архитектурных решений и работоспособность интерпретатора.
 ### Достигнутые цели
 
 В рамках данной работы была достигнута основная цель — анализ инструментов разработки языков программирования и создание интерпретатора учебного языка Aqua.
@@ -1067,8 +1058,14 @@ Parser error: unexpected token '}' at line 10
 
 Проведено тестирование интерпретатора с использованием модульных тестов, что позволило подтвердить корректность работы как в штатных сценариях, так и при возникновении ошибок.
 
-Дополнительно стоит отметить, что в примерах программ на языке aqua продемонстрирована практическая выразительность языка: в файле `examples/brain_fuck_interpreter.aqua` реализован рабочий интерпретатор языка Brainfuck, что подтверждает достаточный уровень абстракции и полноту реализованных возможностей Aqua.
+Дополнительно стоит отметить, что в примерах программ на языке Aqua (см. Приложение Д) продемонстрированы практические возможности языка: в файле `examples/ege_task.aqua` реализовано решение одной из задач ЕГЭ по информатике, а в файле`examples/brain_fuck_interpreter.aqua` реализован рабочий интерпретатор языка Brainfuck. Данные примеры подтверждают достаточный уровень абстракции и полноту реализованных возможностей языка.
 
+### Оценка производительности языка
+Для оценки производительности интерпретатора языка Aqua было проведено экспериментальное сравнение времени выполнения программы `examples/ege_task.aqua` с аналогичной реализацией на языке Python.
+Измерения показали, что среднее время выполнения составило: 164 мс для языка Aqua и 38 мс для Python.
+Таким образом, интерпретатор Aqua уступает по скорости выполнения примерно в 4 раза.
+
+Полученный результат является ожидаемым и объясняется рядом факторов: отсутствием оптимизаций, характерных для зрелых интерпретаторов, а также учебной направленностью реализации. При этом достигнутый уровень производительности можно считать удовлетворительным, поскольку он подтверждает корректность архитектурных решений и работоспособность интерпретатора.
 ### Перспективы развития
 
 Перспективными направлениями являются:
@@ -1095,3 +1092,1554 @@ Parser error: unexpected token '}' at line 10
 ## Список использованных источников
     
 ## Приложения
+
+Полная версия проекта доступна в репозитории:
+https://github.com/vankad24/aqua_lang_interpreter
+### Приложение А
+Файлы директории `frontend`.
+
+javalex.l
+```
+package frontend;
+%%
+%int
+id=([a-zA-Z_][a-zA-Z0-9_]*)
+%%
+"/*"([^*]|"*"+[^/*])*"*"+"/" { j0.comment(); }
+"//".*\r?\n                  { j0.comment(); }
+[ \t\r\f]+                   { j0.whitespace(); }
+\n                           { j0.newline(); }
+"break"                { return j0.scan(Parser.BREAK); }
+"float"               { return j0.scan(Parser.FLOAT); }
+"else"                 { return j0.scan(Parser.ELSE); }
+"false"                { return j0.scan(Parser.BOOLLIT); }
+"for"                  { return j0.scan(Parser.FOR); }
+"if"                   { return j0.scan(Parser.IF); }
+"int"                  { return j0.scan(Parser.INT); }
+"null"                 { return j0.scan(Parser.NULLVAL); }
+"public"               { return j0.scan(Parser.PUBLIC); }
+"return"               { return j0.scan(Parser.RETURN); }
+"static"               { return j0.scan(Parser.STATIC); }
+"string"               { return j0.scan(Parser.STRING); }
+"true"                 { return j0.scan(Parser.BOOLLIT); }
+"bool"                 { return j0.scan(Parser.BOOL); }
+"void"                 { return j0.scan(Parser.VOID); }
+"fn"                   { return j0.scan(Parser.FN); }
+"intarray"             { return j0.scan(Parser.INTARRAY); }
+"while"                { return j0.scan(Parser.WHILE); }
+"do"                   { return j0.scan(Parser.DO); }
+"class"                { return j0.scan(Parser.CLASS); }
+"("                    { return j0.scan(j0.ord("("));}
+")"                    { return j0.scan(j0.ord(")"));}
+"["                    { return j0.scan(j0.ord("["));}
+"]"                    { return j0.scan(j0.ord("]"));}
+"{"                    { return j0.scan(j0.ord("{"));}
+"}"                    { return j0.scan(j0.ord("}"));}
+";"                    { return j0.scan(j0.ord(";"));}
+":"                    { return j0.scan(j0.ord(":"));}
+"!"                    { return j0.scan(j0.ord("!"));}
+"*"                    { return j0.scan(j0.ord("*"));}
+"/"                    { return j0.scan(j0.ord("/"));}
+"%"                    { return j0.scan(j0.ord("%"));}
+"+"                    { return j0.scan(j0.ord("+"));}
+"-"                    { return j0.scan(j0.ord("-"));}
+"<"                    { return j0.scan(j0.ord("<"));}
+"<="                   { return j0.scan(Parser.LESSTHANOREQUAL);}
+">"                    { return j0.scan(j0.ord(">"));}
+">="                   { return j0.scan(Parser.GREATERTHANOREQUAL);}
+"=="                   { return j0.scan(Parser.ISEQUALTO);}
+"!="                   { return j0.scan(Parser.NOTEQUALTO);}
+"&&"                   { return j0.scan(Parser.LOGICALAND);}
+"||"                   { return j0.scan(Parser.LOGICALOR);}
+"="                    { return j0.scan(j0.ord("=")); }
+":="                   { return j0.scan(Parser.RANGESEPARATOR); }
+"++"                   { return j0.scan(Parser.INCREMENT); }
+"--"                   { return j0.scan(Parser.DECREMENT); }
+"+="                   { return j0.scan(Parser.ADDEQUAL); }
+"-="                   { return j0.scan(Parser.MINUSEQUAL); }
+"*="                   { return j0.scan(Parser.MULEQUAL); }
+"/="                   { return j0.scan(Parser.DIVEQUAL); }
+","                    { return j0.scan(j0.ord(",")); }
+"."                    { return j0.scan(j0.ord(".")); }
+{id}                   { return j0.scan(Parser.IDENTIFIER); }
+[0-9]+                 { return j0.scan(Parser.INTLIT); }
+[0-9]*"."[0-9]*([eE][+-]?[0-9]+)? { return j0.scan(Parser.DOUBLELIT); }
+([0-9]+)([eE][+-]?([0-9]+))  { return j0.scan(Parser.DOUBLELIT); }
+\"([^\"]|(\\.))*\"     { return j0.scan(Parser.STRINGLIT); }
+.                      { j0.unknownCharError(); }
+```
+
+
+j0gram.y
+```
+%token BREAK FLOAT INT ELSE FOR IF RETURN VOID WHILE DO RANGESEPARATOR
+%token IDENTIFIER CLASSNAME CLASS STRING BOOL FN INTARRAY
+%token INTLIT DOUBLELIT STRINGLIT BOOLLIT NULLVAL
+%token LESSTHANOREQUAL GREATERTHANOREQUAL
+%token ISEQUALTO NOTEQUALTO LOGICALAND LOGICALOR
+%token INCREMENT DECREMENT MINUSEQUAL ADDEQUAL MULEQUAL DIVEQUAL PUBLIC STATIC
+%{
+import static frontend.j0.yylex;
+import static frontend.Yyerror.yyerror;
+%}
+%%
+StartTerm: BlockStmtsOpt{
+    $$=j0.node("BlockStmtsOpt",1024,$1);
+    j0.process((Tree) $$.obj);
+};
+FieldDecl: Type VarDecls{
+  $$=j0.node("FieldDecl",1030,$1,$2); };
+Type: INT | FLOAT | BOOL | STRING | Name | INTARRAY;
+
+Name: IDENTIFIER | QualifiedName ;
+QualifiedName: Name '.' IDENTIFIER {
+  $$=j0.node("QualifiedName",1040,$1,$3);};
+
+VarDecls: VarDeclarator | VarDecls ',' VarDeclarator {
+  $$=j0.node("VarDecls",1050,$1,$3); };
+VarDeclarator: IDENTIFIER | VarDeclarator '[' ']' {
+  $$=j0.node("VarDeclarator",1060,$1); };
+
+BlockOpt: Block | ;
+
+MethodDecl: FN IDENTIFIER '(' FormalParmList ')' Block { $$=j0.node("MethodDecl",1380,$2,$4,$6); }
+|FN IDENTIFIER '(' ')' Block { $$=j0.node("MethodDecl",1381,$2,$5); };
+
+ArgListOpt:  ArgList | ;
+ArgList: Expr | ArgList ',' Expr {
+  $$=j0.node("ArgList",1270,$1,$3); };
+
+MethodCall: Name '(' ArgList ')' { $$=j0.node("MethodCall",1290,$1,$3); }
+| Name '(' ')' { $$=j0.node("MethodCall",1291,$1); };
+  //| Primary '.' IDENTIFIER '(' ArgListOpt ')' {
+  //  $$=j0.node("MethodCall",1291,$1,$3,$5); };
+
+FormalParmListOpt: FormalParmList | ;
+FormalParmList: FormalParm | FormalParmList ',' FormalParm {
+  $$=j0.node("FormalParmList",1090,$1,$3); };
+FormalParm: Type VarDeclarator {
+  $$=j0.node("FormalParm",1100,$1,$2);
+ };
+
+Block: '{' BlockStmtsOpt '}' {$$=j0.node("Block",1200,$2);};
+BlockStmtsOpt: BlockStmts | ;
+BlockStmts:  BlockStmt | BlockStmts BlockStmt {
+  $$=j0.node("BlockStmts",1130,$1,$2); };
+BlockStmt: Stmt ;
+
+StmtEnd: ';' | ;
+
+LocalVarDeclStmt: LocalVarDecl;
+LocalVarDecl: Type VarDecls {
+  $$=j0.node("LocalVarDecl",1140,$1,$2); };
+
+Stmt: Block | ';' | ExprStmt | BreakStmt | ReturnStmt
+      | IfStmt | IfElseStmt | MethodDecl
+      | DoWhileStmt | WhileStmt | ForStmt | LocalVarDeclStmt;
+
+ExprStmt: StmtExpr;
+
+StmtExpr: Assignment | MethodCall ;
+
+IfStmt: IF Expr Block { $$=j0.node("IfStmt",1150,$2,$3); }
+| IF '(' Expr ')' Stmt { $$=j0.node("IfStmt",1151,$3,$5); };
+IfElseStmt: IF '(' Expr ')' Stmt ELSE Stmt { $$=j0.node("IfElseStmt",1160,$3,$5,$7); }
+| IF Expr Block ELSE Stmt { $$=j0.node("IfElseStmt",1161,$2,$3,$5); };
+
+WhileStmt: WHILE '(' Expr ')' Stmt { $$=j0.node("WhileStmt",1210,$3,$5); }
+| WHILE Expr Block { $$=j0.node("WhileStmt",1211,$2,$3); };
+
+DoWhileStmt: DO Block WHILE '(' Expr ')' {
+    $$=j0.node("DoWhileStmt",1212,$5,$2); }|
+    DO Block WHILE Expr{
+        $$=j0.node("DoWhileStmt",1213,$4,$2); };
+
+ForStmt: FOR '(' ForHeader ')' Block { $$=j0.node("ForStmt",1220,$3,$5); }
+ | FOR ForHeader Block { $$=j0.node("ForStmt",1221,$2,$3); };
+
+ForHeader: ForFull | ForNormal | ForShort;
+
+ForShort: Expr { $$=j0.node("ForShort",1226,$1); };
+ForNormal: ForVarInit ForSeparator Expr { $$=j0.node("ForNormal",1222,$1,$2,$3); };
+ForFull: ForVarInit ForSeparator Expr ':' Expr { $$=j0.node("ForFull",1223,$1,$2,$3,$5); }
+
+ForVarInit: IDENTIFIER '=' Expr { $$=j0.node("ForVarInit",1224,$1,$3); } |
+            IDENTIFIER { $$=j0.node("ForVarInit",1225,$1); };
+
+ForSeparator: ':' | RANGESEPARATOR;
+
+ExprOpt: Expr |  ;
+
+StmtExprList: StmtExpr | StmtExprList ',' StmtExpr {
+  $$=j0.node("StmtExprList",1230,$1,$3); };
+
+BreakStmt: BREAK StmtEnd | BREAK IDENTIFIER StmtEnd {
+  $$=j0.node("BreakStmt",1240,$2); };
+ReturnStmt: RETURN Expr { $$=j0.node("ReturnStmt",1250,$2); }
+  |RETURN { $$=j0.node("ReturnStmt",1251);};
+
+Primary:  Literal | FieldAccess | MethodCall | '(' Expr ')' {
+  $$=$2;};
+Literal: INTLIT	| DOUBLELIT | BOOLLIT | STRINGLIT | NULLVAL ;
+
+FieldAccess: Primary '.' IDENTIFIER {
+  $$=j0.node("FieldAccess",1280,$1,$3); };
+
+PostFixExpr: Primary | Name ;
+UnaryExpr: '-' UnaryExpr {
+  $$=j0.node("UnaryExpr",1300,$1,$2); }
+    | '!' UnaryExpr {
+  $$=j0.node("UnaryExpr",1301,$1,$2); }
+    | PostFixExpr ;
+MulExpr: UnaryExpr
+    | MulExpr '*' UnaryExpr {
+      $$=j0.node("MulExpr",1310,$1,$2,$3); }
+    | MulExpr '/' UnaryExpr {
+      $$=j0.node("MulExpr",1311,$1,$2,$3); }
+    | MulExpr '%' UnaryExpr {
+      $$=j0.node("MulExpr",1312,$1,$2,$3); };
+AddExpr: MulExpr
+    | AddExpr '+' MulExpr {
+      $$=j0.node("AddExpr",1320,$1,$2,$3); }
+    | AddExpr '-' MulExpr {
+      $$=j0.node("AddExpr",1321,$1,$2,$3); };
+RelOp: LESSTHANOREQUAL | GREATERTHANOREQUAL | '<' | '>' ;
+RelExpr: AddExpr | RelExpr RelOp AddExpr {
+  $$=j0.node("RelExpr",1330,$1,$2,$3); };
+
+EqExpr: RelExpr
+    | EqExpr ISEQUALTO RelExpr {
+  $$=j0.node("EqExpr",1340,$1,$2,$3); }
+| EqExpr NOTEQUALTO RelExpr {
+  $$=j0.node("EqExpr",1341,$1,$2,$3); };
+CondAndExpr: EqExpr | CondAndExpr LOGICALAND EqExpr {
+  $$=j0.node("CondAndExpr", 1350, $1,$2, $3); };
+CondOrExpr: CondAndExpr | CondOrExpr LOGICALOR CondAndExpr {
+  $$=j0.node("CondOrExpr", 1360, $1,$2, $3); };
+
+Expr: CondOrExpr;
+Assignment: LeftHandSide AssignOp Expr {
+$$=j0.node("Assignment",1370, $1, $2, $3); } |
+LeftHandSide IncrementOp { $$=j0.node("Assignment",1380, $1, $2); };
+LeftHandSide: Name | FieldAccess ;
+AssignOp: '=' | MULEQUAL | DIVEQUAL | MINUSEQUAL | ADDEQUAL;
+IncrementOp: INCREMENT | DECREMENT;
+%%
+```
+
+
+j0.java
+```
+public class j0 {
+    public static Yylex yylexer;
+    public static Parser par;
+    static boolean debug = false;
+    static boolean disable_semantic = false;
+    static String file_path = null;
+    public static String[] args;
+    public static SymbolTable global_scope;
+
+    public static void main(String[] argv) throws Exception {
+        args = argv;
+        parseArguments(argv);
+
+        if (file_path == null){
+            System.err.println("No file path provided");
+            System.exit(1);
+        }
+        init(file_path);
+
+        try {
+            int i = par.yyparse();
+            if (debug && i == 0)
+                System.out.println("No errors");
+        }catch (RuntimeException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private static void parseArguments(String[] args) {
+        ...
+    }
+
+    public static int yylineno;
+    public static String yyfilename;
+
+    //   public static parserVal yylval;
+    public static void init(String s) throws Exception {
+        yyfilename = s;
+        yylexer = new Yylex(new FileReader(s));
+        yylineno = 1;
+        par = new Parser();
+        //par.yydebug=true;
+    }
+
+    public static int YYEOF() {
+        return Yylex.YYEOF;
+    }
+
+    public static int yylex() {
+        /* rv - номер лексемы */
+        int rv = 0;
+        try {
+            rv = yylexer.yylex();
+        } catch (java.io.IOException ioException) {
+            rv = -1;
+        }
+        return rv;
+    }
+
+    public static void unknownCharError() {
+        ErrorHandler.print("Lexer error: unrecognized character '" +yylexer.yycharat(0) + "' at line "+ yylineno);
+    }
+
+    public static int scan(int code) {
+        /* code - номер лексемы (определены как константы в parser) */
+        j0.par.yylval =
+                new ParserVal(new Tree("token", 0,
+                        new Token(code, yylexer.yytext(), yylineno)));
+        return code;
+    }
+
+    public static void newline() {
+        yylineno++;
+    }
+
+    public static void whitespace() {
+    }
+
+    public static void comment() {
+    }
+
+    public static short ord(String s) {
+        return (short) (s.charAt(0));
+    }
+
+    public static Tree unwrap(Object obj) {
+        if (obj instanceof Token)
+            return new Tree("token", 0, (Token) obj);
+        else return (Tree) obj;
+    }
+
+    public static ParserVal node(String s, int r, ParserVal... p) {
+        /* s - название правила (слева от :)
+        * r - номер правила (из файла грамматики)
+        * p - массив тех токенов, которые мы берём
+        * */
+        Tree[] t = new Tree[p.length];
+        for (int i = 0; i < t.length; i++)
+            t[i] = (Tree) (p[i].obj);
+        return new ParserVal((Object) new Tree(s, r, t));
+    }
+
+    public static void process(Tree root) {
+        if (debug)root.print();
+//        ((Tree) root.obj).print_graph(yyfilename + ".dot");
+
+        global_scope = new SymbolTable("global");
+        FunctionHandler.initBuiltin(global_scope);
+
+        if (!disable_semantic) {
+            if (debug) System.out.println("----semantic----");
+            Interpreter.semantic(root, global_scope);
+            if (debug) System.out.println("No errors");
+        }
+        // remove all variables except functions
+        global_scope.variables.keySet().removeIf(name -> global_scope.variables.get(name).type != ValueType.FUNCTION);
+
+        if (debug) System.out.println("----interpretation----");
+        Interpreter.interpret(root, global_scope);
+    }
+}
+```
+
+Token.java
+```
+public class Token {
+    public int id;
+    public int code; /* from Parser class */
+    public String text;
+    public int lineno;
+
+    public Token(int code, String s, int l) {
+        this.code = code;
+        text = s;
+        lineno = l;
+        id = Serial.getid();
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "id=" + id +
+                ", code=" + code +
+                ", text='" + text + '\'' +
+                ", lineno=" + lineno +
+                '}';
+    }
+}
+```
+
+
+Tree.java
+```
+public class Tree {
+    public int id;
+    public String sym;
+    public int rule;
+    public int nkids;
+    public Token tok;
+    public Tree[] kids;
+    public RuntimeValue calculated_value;
+
+    public String escape(String s) {
+        if (s.charAt(0) == '\"')
+            return "\\" + s.substring(0, s.length() - 1) + "\\\"";
+        else return s;
+    }
+
+    public String pretty_print_name() {
+        if (tok == null) return sym + "#" + (rule % 10);
+        else {
+            return escape(tok.text) + ":" + tok.code;
+        }
+    }
+
+    ...
+
+    public Tree(String s, int r, Token t) {
+        id = Serial.getid();
+        sym = s;
+        rule = r;
+        tok = t;
+    }
+
+    public Tree(String s, int r, Tree[] t) {
+        /* s - название правила (слева от :)
+         * r - номер правила (из файла грамматики)
+         * p - массив тех токенов, которые мы берём
+         * */
+        id = Serial.getid();
+        //	System.out.println("id " + id + " goes to " + s + "(" +r+")");
+        sym = s;
+        rule = r;
+        nkids = t.length;
+        kids = t;
+    }
+}
+```
+
+
+Фрагмент кода Yylex.java
+```
+  public int yylex() throws java.io.IOException
+  {
+    int zzInput;
+    int zzAction;
+
+    // cached fields:
+    int zzCurrentPosL;
+    int zzMarkedPosL;
+    int zzEndReadL = zzEndRead;
+    char[] zzBufferL = zzBuffer;
+
+    int [] zzTransL = ZZ_TRANS;
+    int [] zzRowMapL = ZZ_ROWMAP;
+    int [] zzAttrL = ZZ_ATTRIBUTE;
+
+    while (true) {
+      zzMarkedPosL = zzMarkedPos;
+
+      zzAction = -1;
+
+      zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
+
+      zzState = ZZ_LEXSTATE[zzLexicalState];
+
+      // set up zzAction for empty match case:
+      int zzAttributes = zzAttrL[zzState];
+      if ( (zzAttributes & 1) == 1 ) {
+        zzAction = zzState;
+      }
+
+
+      zzForAction: {
+        while (true) {
+
+          if (zzCurrentPosL < zzEndReadL) {
+            zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL, zzEndReadL);
+            zzCurrentPosL += Character.charCount(zzInput);
+          }
+          else if (zzAtEOF) {
+            zzInput = YYEOF;
+            break zzForAction;
+          }
+          else {
+            // store back cached positions
+            zzCurrentPos  = zzCurrentPosL;
+            zzMarkedPos   = zzMarkedPosL;
+            boolean eof = zzRefill();
+            // get translated positions and possibly new buffer
+            zzCurrentPosL  = zzCurrentPos;
+            zzMarkedPosL   = zzMarkedPos;
+            zzBufferL      = zzBuffer;
+            zzEndReadL     = zzEndRead;
+            if (eof) {
+              zzInput = YYEOF;
+              break zzForAction;
+            }
+            else {
+              zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL, zzEndReadL);
+              zzCurrentPosL += Character.charCount(zzInput);
+            }
+          }
+          int zzNext = zzTransL[ zzRowMapL[zzState] + zzCMap(zzInput) ];
+          if (zzNext == -1) break zzForAction;
+          zzState = zzNext;
+
+          zzAttributes = zzAttrL[zzState];
+          if ( (zzAttributes & 1) == 1 ) {
+            zzAction = zzState;
+            zzMarkedPosL = zzCurrentPosL;
+            if ( (zzAttributes & 8) == 8 ) break zzForAction;
+          }
+
+        }
+      }
+
+      // store back cached position
+      zzMarkedPos = zzMarkedPosL;
+
+      if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
+        zzAtEOF = true;
+        return YYEOF;
+      }
+      else {
+        switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
+          case 1:
+            { j0.unknownCharError();
+            }
+          // fall through
+          case 60: break;
+          case 2:
+            { j0.whitespace();
+            }
+          // fall through
+          case 61: break;
+          case 3:
+            { j0.newline();
+            }
+          // fall through
+          case 62: break;
+          case 4:
+            { return j0.scan(j0.ord("!"));
+            }
+          // fall through
+          case 63: break;
+          case 5:
+            { return j0.scan(j0.ord("%"));
+            }
+          // fall through
+          case 64: break;
+          case 6:
+            { return j0.scan(j0.ord("("));
+            }
+          // fall through
+          case 65: break;
+          case 7:
+            { return j0.scan(j0.ord(")"));
+            }
+          // fall through
+          case 66: break;
+          case 8:
+            { return j0.scan(j0.ord("*"));
+            }
+          // fall through
+          case 67: break;
+          case 9:
+            { return j0.scan(j0.ord("+"));
+            }
+          // fall through
+          case 68: break;
+          case 10:
+            { return j0.scan(j0.ord(","));
+            }
+          // fall through
+          case 69: break;
+          case 11:
+            { return j0.scan(j0.ord("-"));
+            }
+          // fall through
+          case 70: break;
+          case 12:
+            { return j0.scan(j0.ord("."));
+            }
+          // fall through
+          case 71: break;
+          case 13:
+            { return j0.scan(j0.ord("/"));
+            }
+          // fall through
+          case 72: break;
+          case 14:
+            { return j0.scan(Parser.INTLIT);
+            }
+          // fall through
+          case 73: break;
+          case 25:
+            { return j0.scan(Parser.NOTEQUALTO);
+            }
+          // fall through
+          case 84: break;
+          case 26:
+            { return j0.scan(Parser.STRINGLIT);
+            }
+          // fall through
+          case 85: break;
+          ...
+```
+
+
+Фрагмент кода Parser.java
+```
+public int yyparse()
+{
+boolean doaction;
+  init_stacks();
+  yynerrs = 0;
+  yyerrflag = 0;
+  yychar = -1;          //impossible char forces a read
+  yystate=0;            //initial state
+  state_push(yystate);  //save it
+  val_push(yylval);     //save empty value
+  while (true) //until parsing is done, either correctly, or w/error
+    {
+    doaction=true;
+    if (yydebug) debug("loop"); 
+    //#### NEXT ACTION (from reduction table)
+    for (yyn=yydefred[yystate];yyn==0;yyn=yydefred[yystate])
+      {
+      if (yydebug) debug("yyn:"+yyn+"  state:"+yystate+"  yychar:"+yychar);
+      if (yychar < 0)      //we want a char?
+        {
+        yychar = yylex();  //get next token
+        if (yydebug) debug(" next yychar:"+yychar);
+        //#### ERROR CHECK ####
+        if (yychar < 0)    //it it didn't work/error
+          {
+          yychar = 0;      //change it to default string (no -1!)
+          if (yydebug)
+            yylexdebug(yystate,yychar);
+          }
+        }//yychar<0
+      yyn = yysindex[yystate];  //get amount to shift by (shift index)
+      if ((yyn != 0) && (yyn += yychar) >= 0 &&
+          yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
+        {
+        if (yydebug)
+          debug("state "+yystate+", shifting to state "+yytable[yyn]);
+        //#### NEXT STATE ####
+        yystate = yytable[yyn];//we are in a new state
+        state_push(yystate);   //save it
+        val_push(yylval);      //push our lval as the input for next rule
+        yychar = -1;           //since we have 'eaten' a token, say we need another
+        if (yyerrflag > 0)     //have we recovered an error?
+           --yyerrflag;        //give ourselves credit
+        doaction=false;        //but don't process yet
+        break;   //quit the yyn=0 loop
+        }
+
+    yyn = yyrindex[yystate];  //reduce
+    if ((yyn !=0 ) && (yyn += yychar) >= 0 &&
+            yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
+      {   //we reduced!
+      if (yydebug) debug("reduce");
+      yyn = yytable[yyn];
+      doaction=true; //get ready to execute
+      break;         //drop down to actions
+      }
+    else //ERROR RECOVERY
+      {
+      if (yyerrflag==0)
+        {
+        yyerror("syntax error");
+        yynerrs++;
+        }
+      if (yyerrflag < 3) //low error count?
+        {
+        yyerrflag = 3;
+        while (true)   //do until break
+          {
+          if (stateptr<0)   //check for under & overflow here
+            {
+            yyerror("stack underflow. aborting...");  //note lower case 's'
+            return 1;
+            }
+          yyn = yysindex[state_peek(0)];
+          if ((yyn != 0) && (yyn += YYERRCODE) >= 0 &&
+                    yyn <= YYTABLESIZE && yycheck[yyn] == YYERRCODE)
+            {
+            if (yydebug)
+              debug("state "+state_peek(0)+", error recovery shifting to state "+yytable[yyn]+" ");
+            yystate = yytable[yyn];
+            state_push(yystate);
+            val_push(yylval);
+            doaction=false;
+            break;
+            }
+          else
+            {
+            if (yydebug)
+              debug("error recovery discarding state "+state_peek(0)+" ");
+            if (stateptr<0)   //check for under & overflow here
+              {
+              yyerror("Stack underflow. aborting...");  //capital 'S'
+              return 1;
+              }
+            state_pop();
+            val_pop();
+            }
+          }
+        }
+      else            //discard this token
+        {
+        if (yychar == 0)
+          return 1; //yyabort
+        if (yydebug)
+          {
+          yys = null;
+          if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
+          if (yys == null) yys = "illegal-symbol";
+          debug("state "+yystate+", error recovery discards token "+yychar+" ("+yys+")");
+          }
+        yychar = -1;  //read another
+        }
+      }//end error recovery
+    }//yyn=0 loop
+    if (!doaction)   //any reason not to proceed?
+      continue;      //skip action
+    yym = yylen[yyn];          //get count of terminals on rhs
+    if (yydebug)
+      debug("state "+yystate+", reducing "+yym+" by rule "+yyn+" ("+yyrule[yyn]+")");
+    if (yym>0)                 //if count of rhs not 'nil'
+      yyval = val_peek(yym-1); //get current semantic value
+    yyval = dup_yyval(yyval); //duplicate yyval if ParserVal is used as semantic value
+    switch(yyn)
+      {
+//########## USER-SUPPLIED ACTIONS ##########
+case 1:
+//#line 12 "j0gram.y"
+{
+    yyval=j0.node("BlockStmtsOpt",1024,val_peek(0));
+    j0.process((Tree) yyval.obj);
+}
+break;
+case 2:
+//#line 16 "j0gram.y"
+{
+  yyval=j0.node("ClassDecl",1000,val_peek(1),val_peek(0));
+ }
+break;
+case 3:
+//#line 19 "j0gram.y"
+{ yyval=j0.node("ClassBody",1010,val_peek(1)); }
+break;
+case 4:
+//#line 20 "j0gram.y"
+{ yyval=j0.node("ClassBody",1011); }
+break;
+case 6:
+//#line 22 "j0gram.y"
+{
+  yyval=j0.node("ClassBodyDecls",1020,val_peek(1),val_peek(0)); }
+break;
+case 10:
+//#line 25 "j0gram.y"
+{
+  yyval=j0.node("FieldDecl",1030,val_peek(1),val_peek(0)); }
+break;
+case 19:
+//#line 30 "j0gram.y"
+{
+  yyval=j0.node("QualifiedName",1040,val_peek(2),val_peek(0));}
+break;
+case 21:
+//#line 33 "j0gram.y"
+{
+  yyval=j0.node("VarDecls",1050,val_peek(2),val_peek(0)); }
+break;
+case 23:
+//#line 35 "j0gram.y"
+{
+  yyval=j0.node("VarDeclarator",1060,val_peek(2)); }
+break;
+...
+```
+
+
+### Приложение Б
+Файлы директории `runtime`.
+
+ErrorHandler.java
+```
+public class ErrorHandler {
+    public static void print(String msg){
+        throw new RuntimeException(msg);
+    }
+
+    public static void error(Token t, String msg){
+        String result_msg = "";
+        if (t!=null) {
+            result_msg+="File " + j0.yyfilename + ":" + t.lineno + "\n";
+            result_msg+="\t" + t.text + "\n";
+        }
+        result_msg+=msg;
+        throw new RuntimeException(result_msg);
+    }
+
+    // The error appears only if there is a bug in the interpreter
+    public static void interpreterError(String msg){
+        print("Interpreter error: "+msg);
+    }
+
+    public static void notImplementedError(String msg){
+        print("Not yet implemented: "+msg);
+    }
+
+    public static void syntaxError(Token t, String msg){
+        error(t, "Syntax error: "+msg);
+    }
+
+    public static void typeError(Token t, String msg){
+        error(t, "Type error: "+msg);
+    }
+
+    public static void redeclaration(Token t, String name){
+        error(t, "Name error: name "+name+" already exist");
+    }
+
+    public static void unknownName(Token t, String name){
+        error(t, "NameError: name '"+name+"' is not defined");
+    }
+    public static void nameError(Token t, String msg){
+        error(t, "NameError: "+msg);
+    }
+
+}
+```
+
+
+FunctionHandler.java
+```
+public class FunctionHandler {
+    static Scanner sc = new Scanner(System.in);
+
+     static Object[][] built_in_functions = {{"print", ValueType.NONE}, {"println", ValueType.NONE}, {"readInt",ValueType.INTEGER}, {"readFloat",ValueType.FLOAT }, {"newIntArray",ValueType.INTARRAY }, {"getElement",ValueType.INTEGER }, {"setElement",ValueType.NONE }, {"readCharsAsIntArray",ValueType.INTARRAY }, {"printChar", ValueType.NONE}, {"getLen", ValueType.INTEGER}, {"readChar", ValueType.INTEGER}, {"getArg", ValueType.INTARRAY }, {"readFile", ValueType.INTARRAY },};
+
+    public static void initBuiltin(SymbolTable scope){
+        for (var pair : built_in_functions) {
+            scope.addVar(((String) pair[0]), new RuntimeValue(ValueType.FUNCTION, new FunctionType((int) pair[1])));
+        }
+    }
+
+    public static RuntimeValue eval(String name, Tree args, SymbolTable scope){
+        var func = (FunctionType) scope.getVar(name).value;
+
+        if (func.is_build_in)return evalBuiltin(name, args, scope);
+        else {
+            var args_list = new ArrayList<Tree>();
+            addArgsToArrayList(args, args_list);
+
+            var func_scope = new SymbolTable("function", scope);
+            func_scope.is_inside_function = true;
+            for (int i = 0; i <args_list.size(); i++) {
+                var varInit = func.params.get(i);
+                var type = varInit.kids[0].tok;
+                var var_name = varInit.kids[1].tok.text;
+                var value = Interpreter.evalExpr(args_list.get(i), scope);
+                func_scope.addVar(var_name, new RuntimeValue(PrimitiveHandler.tokenToType(type)));
+                func_scope.setVar(var_name, value);
+            }
+            return Interpreter.evalBlock(func.block, func_scope);
+        }
+    }
+
+    public static RuntimeValue evalBuiltin(String name, Tree args, SymbolTable scope){
+        var args_list = new ArrayList<Tree>();
+        addArgsToArrayList(args, args_list);
+
+        switch (name){
+            case "print","println"->{
+                for (int i = 0; i <args_list.size(); i++) {
+                    var runtimeValue = Interpreter.evalExpr(args_list.get(i), scope);
+                    if (runtimeValue.type == ValueType.INTARRAY){
+                        System.out.print(Arrays.toString((int[])runtimeValue.value));
+                    }else System.out.print(runtimeValue.value);
+                    if (i != args_list.size()-1) System.out.print(" ");
+                }
+
+                if (name.equals("println")) System.out.println();
+            }
+            case "printChar" ->{
+                checkArgsNumber(name, 1, args_list.size());
+                var runtimeValue = Interpreter.evalExpr(args_list.get(0), scope);
+                checkArgsType(name, ValueType.INTEGER, runtimeValue.type);
+                System.out.print((char)(int)runtimeValue.value);
+            }
+            case "readInt"->{
+                checkArgsNumber(name, 0, args_list.size());
+                return new RuntimeValue(ValueType.INTEGER, sc.nextInt());
+            }
+            case "readFloat"->{
+                checkArgsNumber(name, 0, args_list.size());
+                return new RuntimeValue(ValueType.FLOAT, sc.nextFloat());
+            }
+            case "newIntArray"->{
+                checkArgsNumber(name, 1, args_list.size());
+                var runtimeValue = Interpreter.evalExpr(args_list.get(0), scope);
+                checkArgsType(name, ValueType.INTEGER, runtimeValue.type);
+                int len = (int)runtimeValue.value;
+                return new RuntimeValue(ValueType.INTARRAY, new int[len]);
+            }
+            case "readCharsAsIntArray"->{
+                checkArgsNumber(name, 0, args_list.size());
+                String s = sc.nextLine();
+                while (sc.hasNextLine()){
+                    s+=sc.nextLine();
+                }
+                int[] arr = new int[s.length()];
+                for (int i = 0; i < s.length(); i++) {
+                    arr[i] = s.charAt(i);
+                }
+                return new RuntimeValue(ValueType.INTARRAY, arr);
+            }
+
+
+	...
+
+
+    static void addArgsToArrayList(Tree arg, ArrayList<Tree> elements){
+        if (arg!=null) {
+            if (arg.sym.equals("ArgList") || arg.sym.equals("FormalParmList")) {
+                for (var node : arg.kids) addArgsToArrayList(node, elements);
+            } else elements.add(arg);
+        }
+    }
+
+    static void checkArgsNumber(String fun_name, int params, int args){
+        if (params!=args)ErrorHandler.print("Function "+fun_name+" takes "+params+" arguments, but "+args+" was given");
+    }
+
+    static void checkArgsType(String fun_name, int expected, int got){
+        if (expected!=got)ErrorHandler.print("Function "+fun_name+" expected "+ValueType.getName(expected)+" type, but "+ValueType.getName(got)+" was given");
+    }
+
+    public static String readFileToString(String filePath) throws IOException {
+        return Files.readString(Path.of(filePath), StandardCharsets.UTF_8);
+    }
+}
+```
+
+PrimitiveHandler.java
+```
+public class PrimitiveHandler {
+
+    public static RuntimeValue analyzeOperator(RuntimeValue v1, String op, RuntimeValue v2) {
+        int new_type = determineResultType(v1, v2);
+        var r = switch (new_type) {
+            case ValueType.FLOAT -> processOperator(new RuntimeValue(new_type, 1f),op,new RuntimeValue(new_type, 1f));
+            case ValueType.INTEGER -> processOperator(new RuntimeValue(new_type, 1),op,new RuntimeValue(new_type, 1));
+            case ValueType.BOOL -> processOperator(new RuntimeValue(new_type, true),op,new RuntimeValue(new_type, true));
+            default -> null;
+        };
+        if (r==null)return new RuntimeValue(ValueType.UNKNOWN);
+        return new RuntimeValue(r.type);
+    }
+	
+	...
+
+    public static int tokenToType(Token type){
+        return switch (type.code){
+            case Parser.INT-> ValueType.INTEGER;
+            case Parser.FLOAT-> ValueType.FLOAT;
+            case Parser.BOOL-> ValueType.BOOL;
+            case Parser.INTARRAY-> ValueType.INTARRAY;
+            default ->  ValueType.UNKNOWN;
+        };
+    }
+
+    static RuntimeValue handleInt(int v1, int v2, String op) {
+        return switch (op) {
+            case "+" -> new RuntimeValue(ValueType.INTEGER, v1 + v2);
+            case "-" -> new RuntimeValue(ValueType.INTEGER,v1 - v2);
+            case "*" -> new RuntimeValue(ValueType.INTEGER,v1 * v2);
+            case "/" -> new RuntimeValue(ValueType.INTEGER,v1 / v2);
+            case "%" -> new RuntimeValue(ValueType.INTEGER,v1 % v2);
+            case ">" -> new RuntimeValue(ValueType.BOOL,v1 > v2);
+            case "<" -> new RuntimeValue(ValueType.BOOL,v1 < v2);
+            case "<=" -> new RuntimeValue(ValueType.BOOL,v1 <= v2);
+            case ">=" -> new RuntimeValue(ValueType.BOOL,v1 >= v2);
+            case "==" -> new RuntimeValue(ValueType.BOOL,v1 == v2);
+            case "!=" -> new RuntimeValue(ValueType.BOOL,v1 != v2);
+            default -> {
+                throw new IllegalArgumentException("Unsupported operator: " + op);
+            }
+        };
+    }
+
+    static RuntimeValue handleFloat(float v1, float v2, String op) {
+        return switch (op) {
+            case "+" -> new RuntimeValue(ValueType.FLOAT, v1 + v2);
+            case "-" -> new RuntimeValue(ValueType.FLOAT,v1 - v2);
+            case "*" -> new RuntimeValue(ValueType.FLOAT,v1 * v2);
+            case "/" -> new RuntimeValue(ValueType.FLOAT,v1 / v2);
+            case ">" -> new RuntimeValue(ValueType.BOOL,v1 > v2);
+            case "<" -> new RuntimeValue(ValueType.BOOL,v1 < v2);
+            case "<=" -> new RuntimeValue(ValueType.BOOL,v1 <= v2);
+            case ">=" -> new RuntimeValue(ValueType.BOOL,v1 >= v2);
+            case "==" -> new RuntimeValue(ValueType.BOOL,v1 == v2);
+            case "!=" -> new RuntimeValue(ValueType.BOOL,v1 != v2);
+            default -> {
+                throw new IllegalArgumentException("Unsupported operator: " + op);
+            }
+        };
+    }
+...
+```
+
+
+SymbolTable.java
+```
+public class SymbolTable {
+    String name;
+    SymbolTable parent;
+    public HashMap<String, RuntimeValue> variables;
+    HashSet<String> assigned_vars;
+    boolean is_inside_function;
+
+    public SymbolTable(String name){
+        this.name = name;
+        this.parent = null;
+        variables = new HashMap<>();
+        assigned_vars = new HashSet<>();
+        is_inside_function = false;
+    }
+    public SymbolTable(String name, SymbolTable parent){
+        this.name = name;
+        this.parent = parent;
+        variables = new HashMap<>();
+        assigned_vars = new HashSet<>();
+        is_inside_function = parent.is_inside_function;
+    }
+
+    public RuntimeValue getVar(String name){
+        if (variables.containsKey(name)) return variables.get(name);
+        if (parent==null) return null;
+        return parent.getVar(name);
+    }
+
+    public boolean contains(String name){
+        return variables.containsKey(name);
+    }
+    public void addVar(String name, RuntimeValue runtimeValue) {
+        if (variables.containsKey(name))
+            ErrorHandler.interpreterError("Redeclaration of name" + name);
+        variables.put(name, runtimeValue);
+    }
+
+    public void setVar(String name, RuntimeValue value){
+        var current_value = variables.get(name);
+        if (current_value!=null){
+            if ( current_value.type!=value.type)
+                ErrorHandler.interpreterError("Assign type mismatch for name: "+ name);
+            variables.put(name, value);
+        } else if (parent != null) parent.setVar(name, value);
+        else ErrorHandler.interpreterError("Unknown name: "+ name);
+    }
+
+    boolean isInitialized(String var_name){
+        if (assigned_vars.contains(var_name))return true;
+        else {
+            if (parent == null)return false;
+            else return parent.isInitialized(var_name);
+        }
+    }
+
+}
+```
+
+
+Interpreter.java
+```
+public class Interpreter {
+
+    public static void semantic(Tree root, SymbolTable global_scope) {
+        analyzeBlock(root, global_scope);
+    }
+
+    public static void analyzeBlock(Tree node, SymbolTable scope) {
+        if (node == null)return;
+        switch (node.sym) {
+            case "LocalVarDecl" -> {
+                declareVar(node.kids[0].tok, node.kids[1].tok.text, scope);
+            }
+            case "Assignment" -> {
+                String var_name = node.kids[0].tok.text;
+                RuntimeValue result;
+                String op = node.kids[1].tok.text;
+                if (!op.equals("=")) {
+                    String s = switch (op) {
+                        case "+=", "-=", "++", "--" -> "AddExpr";
+                        case "*=","/=" -> "MulExpr";
+                        default -> null;
+                    };
+                    Tree add_value;
+                    if (op.equals("++") || op.equals("--")) add_value = new Tree("token", -1, new Token(Parser.INTLIT, "1", -1));
+                    else add_value = node.kids[2];
+                    result = analyzeExpr(new Tree(s, -1, new Tree[]{new Tree("token", -1, node.kids[0].tok), new Tree("token", -1, new Token(-1, op.substring(0, 1), -1)), add_value}), scope);
+                }else{
+                    result = analyzeExpr(node.kids[2], scope);
+                }
+                var v = scope.getVar(var_name);
+                if (v == null) scope.addVar(var_name, result);
+                else checkType(node.kids[0].tok, var_name, v.type, result.type);
+                scope.assigned_vars.add(var_name);
+            }
+            case "MethodCall" -> {
+                checkMethodCall(node, scope);
+            }
+            case "IfStmt", "IfElseStmt" -> {
+                var r = analyzeExpr(node.kids[0], scope);
+                checkType(node.tok, "if stmt condition", ValueType.BOOL, r.type);
+
+                var if_block = node.kids[1];
+                var if_scope = new SymbolTable("if", scope);
+                analyzeBlock(if_block, if_scope);
+                if (node.sym.equals("IfElseStmt")) {
+                    var else_block = node.kids[2];
+                    var else_scope = new SymbolTable("else", scope);
+                    analyzeBlock(else_block, else_scope);
+
+                    // set vars as assigned for if-else
+                    for (String el : if_scope.assigned_vars) {
+                        if (else_scope.assigned_vars.contains(el)) {
+                            scope.assigned_vars.add(el);
+                        }
+                    }
+                }
+            }
+            case "WhileStmt", "DoWhileStmt" -> {
+                if (!node.sym.equals("DoWhileStmt")) {
+                    var r = analyzeExpr(node.kids[0], scope);
+                    checkType(node.tok, "while stmt condition", ValueType.BOOL, r.type);
+                }
+                var while_block = node.kids[1];
+                var while_scope = new SymbolTable("while", scope);
+                analyzeBlock(while_block, while_scope);
+
+                // set vars as assigned for do-while
+                if (node.sym.equals("DoWhileStmt")) {
+                    scope.assigned_vars.addAll(while_scope.assigned_vars);
+                    var r = analyzeExpr(node.kids[0], while_scope);
+                    checkType(node.tok, "while stmt condition", ValueType.BOOL, r.type);
+                }
+            }
+            case "ForStmt" -> {
+                var for_block = node.kids[1];
+                var for_scope = new SymbolTable("for", scope);
+                var for_header = node.kids[0];
+                if (for_header.sym.equals("ForShort")){
+                    var r = analyzeExpr(for_header.kids[0], scope);
+                    checkType(node.tok, "for initialization", ValueType.INTEGER, r.type);
+                }else{
+                    // "ForNormal"
+                    var for_var_init = for_header.kids[0];
+                    var var_name = for_var_init.kids[0].tok.text;
+                    declareVar(new Token(Parser.INT,"",0),var_name, for_scope);
+                    if (for_var_init.rule == 1224){
+                        var r = analyzeExpr(for_var_init.kids[1], for_scope);
+                        checkType(node.tok, "for initialization", ValueType.INTEGER, r.type);
+                    }
+                    for_scope.assigned_vars.add(var_name);
+
+                    var r = analyzeExpr(for_header.kids[2], for_scope);
+                    checkType(node.tok, "for limit", ValueType.INTEGER, r.type);
+
+                    //"ForFull"
+                    if (for_header.sym.equals("ForFull")){
+                        r = analyzeExpr(for_header.kids[3], for_scope);
+                        checkType(node.tok, "for step", ValueType.INTEGER, r.type);
+                    }
+
+                }
+
+                analyzeBlock(for_block, for_scope);
+            }
+            case "ReturnStmt" -> {
+                if (!scope.is_inside_function) ErrorHandler.syntaxError(node.tok,"return statement outside a function");
+                if (node.kids.length != 0) analyzeExpr(node.kids[0], scope);
+            }
+            case "BlockStmtsOpt", "BlockStmts", "Block" -> {
+                for (Tree kid : node.kids) {
+                    analyzeBlock(kid, scope);
+
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    public static void declareVar(Token type, String var_name, SymbolTable scope) {
+        if (scope.contains(var_name)) {
+            ErrorHandler.redeclaration(type, var_name);
+        }
+        scope.addVar(var_name, new RuntimeValue(PrimitiveHandler.tokenToType(type)));
+    }
+
+    public static void checkType(Token t, String name, int expected, int provided) {
+        if (provided != expected) {
+            ErrorHandler.typeError(t, String.format("Assign type mismatch for name '%s'. Expected type '%s', got '%s'", name, ValueType.getName(expected),ValueType.getName(provided)));
+        }
+    }
+
+    public static void collectAllReturnStmts(Tree node, ArrayList<Tree> returns){
+        if (node.sym.equals("ReturnStmt")){
+            returns.add(node);
+            return;
+        }
+        if (node.kids != null) {
+            for (Tree kid : node.kids) {
+                collectAllReturnStmts(kid, returns);
+            }
+        }
+    }
+
+
+    static public void interpret(Tree root, SymbolTable global_scope) {
+        evalBlock(root, global_scope);
+    }
+
+    public static RuntimeValue evalBlock(Tree node, SymbolTable scope) {
+        if (node == null || node.sym.equals("token") && node.tok.text.equals(";")) return null;
+        switch (node.sym) {
+            case "LocalVarDecl" -> {
+                declareVar(node.kids[0].tok, node.kids[1].tok.text, scope);
+            }
+            case "Assignment" -> {
+                String var_name = node.kids[0].tok.text;
+                RuntimeValue result;
+                String op = node.kids[1].tok.text;
+                if (!op.equals("=")) {
+                    String s = switch (op) {
+                        case "+=", "-=", "++", "--" -> "AddExpr";
+                        case "*=","/=" -> "MulExpr";
+                        default -> null;
+                    };
+                    Tree add_value;
+                    if (op.equals("++") || op.equals("--")){
+                        add_value = new Tree("token", -1, new Token(Parser.INTLIT, "1", -1));
+                        add_value.calculated_value = new RuntimeValue(ValueType.INTEGER, 1);;
+                    }
+                    else add_value = node.kids[2];
+                    result = evalExpr(new Tree(s, -1, new Tree[]{new Tree("token", -1, node.kids[0].tok), new Tree("token", -1, new Token(-1, op.substring(0, 1), -1)), add_value}), scope);
+                }else{
+                    result = evalExpr(node.kids[2], scope);
+                }
+                var v = scope.getVar(var_name);
+                if (v == null) scope.addVar(var_name, result);
+                else scope.setVar(var_name, result);
+            }
+            case "MethodDecl" -> {
+                // already declared in global scope
+            }
+            case "MethodCall" -> {
+                processMethodCall(node, scope);
+            }
+            case "IfStmt" -> {
+                return processIfElse(node.kids[0], node.kids[1], null, scope);
+            }
+            case "IfElseStmt" -> {
+                return processIfElse(node.kids[0], node.kids[1], node.kids[2], scope);
+            }
+            case "WhileStmt" -> {
+                return processWhile(node.kids[0], node.kids[1], scope);
+            }
+            case "DoWhileStmt" -> {
+                return processDoWhile(node.kids[0], node.kids[1], scope);
+            }
+            case "ForStmt" -> {
+                return processFor(node.kids[0], node.kids[1], scope);
+            }
+            case "ReturnStmt" -> {
+                if (node.kids.length == 0) return new RuntimeValue(ValueType.NONE);
+                return evalExpr(node.kids[0], scope);
+            }
+            case "BlockStmtsOpt", "BlockStmts", "Block" -> {
+                for (Tree kid : node.kids) {
+                    var result = evalBlock(kid, scope);
+                    if (result != null) return result;
+                }
+            }
+            default -> {
+                ErrorHandler.notImplementedError(node.sym + " " + node.tok);
+            }
+        }
+        return null;
+    }
+
+    public static RuntimeValue evalExpr(Tree node, SymbolTable scope) {
+        switch (node.sym) {
+            case "token" -> {
+                Token t = node.tok;
+                if (t.code == Parser.IDENTIFIER)
+                    return scope.getVar(t.text);
+                else
+                    //PrimitiveHandler.literalToValue(node.tok);
+                    return node.calculated_value;
+            }
+            case "MethodCall" -> {
+                return processMethodCall(node, scope);
+            }
+            case "AddExpr", "MulExpr", "RelExpr", "EqExpr", "CondAndExpr", "CondOrExpr" -> {
+                RuntimeValue r = node.calculated_value;
+                if (r!=null && r.value != null) return r;
+
+                var left = evalExpr(node.kids[0], scope);
+                var op = node.kids[1].tok.text;
+                var right = evalExpr(node.kids[2], scope);
+                return processOperator(left, op, right);
+            }
+            case "UnaryExpr" -> {
+                var op = node.kids[0].tok.text;
+                var right = evalExpr(node.kids[1], scope);
+
+                switch (op){
+                    case "-" -> { return processOperator(new RuntimeValue(right.type, 0), "-", right); }
+                    case "!" -> { return processOperator(new RuntimeValue(ValueType.BOOL, false), "==", right); }
+                    default -> {}
+                }
+
+            }
+
+        }
+        return null;
+    }
+
+    static RuntimeValue processIfElse(Tree condition_expr, Tree if_block, Tree else_block, SymbolTable scope) {
+        var condition = evalExpr(condition_expr, scope);
+        if ((boolean) condition.value) {
+            return evalBlock(if_block, new SymbolTable("if_stmt", scope));
+        } else if (else_block != null) {
+            if (else_block.sym.equals("IfElseStmt")) return evalBlock(else_block, scope);
+            else return evalBlock(else_block, new SymbolTable("else_stmt", scope));
+        }
+        return null;
+    }
+
+    static RuntimeValue processWhile(Tree expr, Tree block, SymbolTable scope) {
+        var condition = evalExpr(expr, scope);
+        while ((boolean) condition.value) {
+            var result = evalBlock(block, new SymbolTable("while_stmt", scope));
+            if (result != null) return result;
+            condition = evalExpr(expr, scope);
+        }
+        return null;
+    }
+
+    static RuntimeValue processDoWhile(Tree expr, Tree block, SymbolTable scope) {
+        SymbolTable do_while_scope = new SymbolTable("do_while_stmt", scope);
+        var r = evalBlock(block, do_while_scope);
+        if (r != null) return r;
+        var condition = evalExpr(expr, do_while_scope);
+        while ((boolean) condition.value) {
+            do_while_scope = new SymbolTable("do_while_stmt", scope);
+            r = evalBlock(block, do_while_scope);
+            if (r != null) return r;
+            condition = evalExpr(expr, do_while_scope);
+        }
+        return null;
+    }
+...
+
+```
+
+### Приложение В
+Консольные команды для генерации кода с помощью утилит JFlex и BYACC/J.
+Примечание: данные команды выполняются на операционной системе windows из корневой папки проекта.
+
+Генерация лексера:
+```
+cd .\src\frontend\
+..\..\jflex-1.9.1\bin\jflex .\javalex.l
+```
+
+Генерация парсера:
+```
+cd .\src\frontend\
+..\..\byaccj1.15_win32\yacc.exe -Jpackage=frontend -Jclass=Parser j0gram.y
+```
+### Приложение Г
+Реализация тестирования, файл InterpreterTests.java:
+```
+class InterpreterTests {
+
+    void test_success(String filename, Object var_value){
+        var file_path = "files/"+filename;
+        int exit_code;
+        try {
+            j0.init(file_path);
+            exit_code = j0.par.yyparse();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        var scope = j0.global_scope;
+
+        var var_val = scope.getVar("res").value;
+
+        assertEquals(0, exit_code);
+        assertEquals(var_value, var_val);
+    }
+
+    void test_fail(String filename, String error_msg){
+        var file_path = "files/"+filename;
+        Exception e = assertThrows(RuntimeException.class, () -> {
+            j0.init(file_path);
+            j0.par.yyparse();
+        });
+        System.out.println(e.getMessage());
+        assertTrue(e.getMessage().contains(error_msg));
+    }
+
+
+    @Test
+    void test_if_success() {
+        test_success("if_success", 8);
+    }
+
+    @Test
+    void test_if_fail_init() {
+        test_fail("if_fail_init", "might not have been initialized");
+    }
+
+    @Test
+    void test_while_success() {
+        test_success("while_success", 3);
+    }
+
+    @Test
+    void test_while_fail() {
+        test_fail("while_fail", "name 'j' is not defined");
+    }
+
+    @Test
+    void test_for_success() {
+        test_success("for_success", 6);
+    }
+
+    @Test
+    void test_for_fail() {
+        test_fail("for_fail", "name 'sum' is not defined");
+    }
+
+    @Test
+    void test_func_success() {
+        test_success("func_success", 8);
+    }
+
+    @Test
+    void test_func_recursion_success() {
+        test_success("func_recursion_success", 24);
+    }
+
+    @Test
+    void test_func_fail() {
+        test_fail("func_fail", "name 'b' is not defined");
+    }
+
+    @Test
+    void test_intarray_success() {
+        test_success("intarray_success", 3);
+    }
+
+    @Test
+    void test_intarray_fail() {
+        test_fail("intarray_fail", "Index 3 out of bounds for length 2");
+    }
+}
+```
+### Приложение Д
+ege_task.aqua
+```
+println("x y w z")
+for x1 : 2 {
+	for y1 : 2 {
+		for w1 : 2{
+			for z1 : 2{
+				x = x1 == 1
+				y = y1 == 1
+				w = w1 == 1
+				z = z1 == 1
+				if !(((x <= y) && (y <= w)) || (z == (x || y))) {
+					println(x1, y1, w1, z1)
+				}
+			}
+		}
+	}
+}					
+```
+
+
+brain_fuck_interpreter.aqua
+```
+fn interpret(intarray code){
+    buffer = newIntArray(300)
+    ptr = 0 //указатель на память (буфер)
+    code_index = 0 //указатель на символ кода
+
+    while code_index < getLen(code){
+        c = getElement(code, code_index)
+        if c == 62 { //'>'
+            ptr++
+        } else if c == 60 { //'<'
+            ptr--
+        } else if c == 43 { //'+'
+            val = getElement(buffer, ptr)
+            setElement(buffer, ptr, val+1)
+        } else if c == 45 { //'-'
+            val = getElement(buffer, ptr)
+            setElement(buffer, ptr, val-1)
+        } else if c == 46 { //'.'
+            printChar(getElement(buffer, ptr))
+        } else if c == 44 { //','
+            setElement(buffer, ptr, readChar())
+        } else if c == 91 { //'['
+            if getElement(buffer, ptr) == 0 {
+                depth = 1
+                while depth > 0 {
+                    code_index++
+                    c = getElement(code, code_index)
+                    if (c == 91) depth++; //'['
+                    if (c == 93) depth--; //']'
+                }
+            }
+        } else if c == 93 { //']'
+            if getElement(buffer, ptr) != 0 {
+                depth = 1
+                while depth > 0 {
+                    code_index--
+                    c = getElement(code, code_index)
+                    if (c == 91) depth--; //'['
+                    if (c == 93) depth++; //']'
+                }
+            }
+        }
+        code_index++
+    }
+}
+
+code = readFile(getArg(-1))
+interpret(code)
+```
+
+
